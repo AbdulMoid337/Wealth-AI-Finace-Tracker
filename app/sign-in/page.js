@@ -3,17 +3,20 @@ import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import app from "../../config";
+import { useUser } from "../context/UserContext";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const auth = getAuth(app);
   const router = useRouter();
+  const { setUserInfo } = useUser();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      setUserInfo({ email, signInMethod: "email" });
       router.push("/dashboard");
     } catch (error) {
       console.error("Error during sign-in:", error.message);
@@ -23,7 +26,11 @@ const SignIn = () => {
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      setUserInfo({ firstName: user.displayName, email: user.email, signInMethod: "google" });
+
       router.push("/dashboard");
     } catch (error) {
       console.error("Error during Google sign-in:", error.message);
@@ -38,7 +45,7 @@ const SignIn = () => {
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600 max-w">
           Or
-          <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+          <a href="sign-up" className="font-medium text-blue-600 hover:text-blue-500">
             create an account
           </a>
         </p>

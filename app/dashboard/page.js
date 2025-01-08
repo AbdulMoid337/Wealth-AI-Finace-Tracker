@@ -37,11 +37,22 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold text-center">Dashboard</h1>
         {user ? (
           <div>
-            <p>Welcome, {userInfo.firstName ? userInfo.firstName : user.email}!</p>
+            <p>
+              Welcome,{" "}
+              {userInfo.signInMethod === "email"
+                ? userInfo.firstName
+                :  user.email.split('@')[0]}
+              !
+            </p>
             <p>Email: {user.email}</p>
-            {user.photoURL && (
-              <img className="rounded-md" src={user.photoURL} alt="User Profile" width="100" />
-            )}
+            <img
+              className="rounded-md"
+              src={
+                user.photoURL 
+              }
+              alt="User Profile"
+              width="100"
+            />
             <button
               onClick={handleSignOut}
               className="w-full py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600"

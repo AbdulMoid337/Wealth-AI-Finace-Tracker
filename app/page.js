@@ -13,7 +13,7 @@ const Home = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
-        router.push('/dashboard'); // Redirect to dashboard if user is authenticated
+        // router.push('/dashboard'); 
       } else {
         setUser(null);
       }
@@ -26,7 +26,7 @@ const Home = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      router.push("/dashboard");
+      // router.push("/dashboard");
     } catch (error) {
       console.error('Error during sign-in:', error.message);
     }
@@ -35,11 +35,9 @@ const Home = () => {
   return (
     <div>
       <h1>Welcome to My App</h1>
-      {user ? (
-        <p>Redirecting to dashboard...</p>
-      ) : (
+     
         <button onClick={signInWithGoogle}>Sign in with Google</button>
-      )}
+
     </div>
   );
 };
