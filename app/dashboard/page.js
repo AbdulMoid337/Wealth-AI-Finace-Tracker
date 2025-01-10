@@ -40,7 +40,7 @@ const Dashboard = () => {
             <p>
               Welcome,{" "}
               {userInfo.signInMethod === "email"
-                ? userInfo.firstName
+                ? user.firstName
                 :  user.email.split('@')[0]}
               !
             </p>
