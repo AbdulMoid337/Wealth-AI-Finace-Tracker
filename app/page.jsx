@@ -1,12 +1,6 @@
-"use client";
-import { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import app from "../config";
 import { Card, CardContent } from "@/components/ui/card";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import Hero from "@/components/Hero";
-import Link from "next/link";
 import Image from "next/image";
 import {
   featuresData,
@@ -14,38 +8,14 @@ import {
   statsData,
   testimonialsData,
 } from "@/data/landing";
+import Hero from "@/components/Hero";
+import Link from "next/link";
 
-const Home = () => {
-  const [user, setUser] = useState(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        // router.push('/dashboard'); 
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
-
-  const signInWithGoogle = async () => {
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-      // router.push("/dashboard");
-    } catch (error) {
-      console.error('Error during sign-in:', error.message);
-    }
-  };
-
+const LandingPage = () => {
   return (
-    <div>
-<Hero />
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <Hero />
 
       {/* Stats Section */}
       <section className="py-20 bg-blue-50">
@@ -62,8 +32,9 @@ const Home = () => {
           </div>
         </div>
       </section>
-         {/* Features Section */}
-         <section id="features" className="py-20">
+
+      {/* Features Section */}
+      <section id="features" className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">
             Everything you need to manage your finances
@@ -81,7 +52,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+
       {/* How It Works Section */}
       <section className="py-20 bg-blue-50">
         <div className="container mx-auto px-4">
@@ -99,8 +70,9 @@ const Home = () => {
           </div>
         </div>
       </section>
-       {/* Testimonials Section */}
-       <section id="testimonials" className="py-20">
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">
             What Our Users Say
@@ -131,8 +103,9 @@ const Home = () => {
           </div>
         </div>
       </section>
-       {/* CTA Section */}
-       <section className="py-20 bg-blue-600">
+
+      {/* CTA Section */}
+      <section className="py-20 bg-blue-600">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Take Control of Your Finances?
@@ -152,9 +125,7 @@ const Home = () => {
         </div>
       </section>
     </div>
-    
   );
 };
 
-export default Home;
-
+export default LandingPage;

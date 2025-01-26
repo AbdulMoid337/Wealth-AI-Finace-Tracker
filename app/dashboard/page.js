@@ -1,71 +1,60 @@
 "use client";
-import { useState, useEffect } from "react";
-import { getAuth } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import app from "../../config";
-import { useUser } from "../context/UserContext";
+import { UserProfile, UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const Dashboard = () => {
-  const [user, setUser] = useState(null);
-  const router = useRouter();
-  const auth = getAuth(app);
-  const { userInfo } = useUser();
+  const { user, isLoaded } = useUser();
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        router.push("/sign-in");
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, router]);
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
-  const handleSignOut = async () => {
-    try {
-      await auth.signOut();
-      router.push("/");
-    } catch (error) {
-      console.error("Error during sign-out:", error.message);
-    }
-  };
+  if (!user) {
+    return <div>Please sign in to access the dashboard</div>;
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center">Dashboard</h1>
-        {user ? (
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+        <div className="absolute top-4 right-4">
+          <UserButton />
+        </div>
+      </div>
+      
+      <div className="bg-white rounded-lg shadow p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <p>
-              Welcome,{" "}
-              {userInfo.signInMethod === "email"
-                ? user.firstName
-                :  user.email.split('@')[0]}
-              !
-            </p>
-            <p>Email: {user.email}</p>
-            <img
-              className="rounded-md"
-              src={
-                user.photoURL 
-              }
-              alt="User Profile"
-              width="100"
-            />
-            <button
-              onClick={handleSignOut}
-              className="w-full py-2 mt-4 text-white bg-red-500 rounded hover:bg-red-600"
-            >
-              Sign out
-            </button>
+            <h2 className="text-xl font-semibold mb-4">User Information</h2>
+            <div className="space-y-2">
+              <p><span className="font-medium">Name:</span> {user.fullName}</p>
+              <p><span className="font-medium">Email:</span> {user.primaryEmailAddress?.emailAddress}</p>
+              <p><span className="font-medium">User ID:</span> {user.id}</p>
+              {user.username && (
+                <p><span className="font-medium">Username:</span> {user.username}</p>
+              )}
+            </div>
           </div>
-        ) : (
-          <p>Loading user information...</p>
-        )}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Profile</h2>
+            <div className="flex items-center space-x-4">
+              <img 
+                src={user.imageUrl} 
+                alt="Profile" 
+                className="w-20 h-20 rounded-full"
+              />
+              <div>
+                <p className="text-gray-600">Member since</p>
+                <p className="font-medium">
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;   
+export default Dashboard;
