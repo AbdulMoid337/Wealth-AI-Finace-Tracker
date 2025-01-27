@@ -69,11 +69,17 @@ export async function bulkDeleteTransactions(transactionIds) {
 
     // Group transactions by account to update balances
     const accountBalanceChanges = transactions.reduce((acc, transaction) => {
+      // Parse amount and ensure it's a number with 2 decimal places
+      const amount = parseFloat(parseFloat(transaction.amount).toFixed(2));
       const change =
         transaction.type === "EXPENSE"
-          ? transaction.amount
-          : -transaction.amount;
-      acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
+          ? -amount  // Negative for expenses
+          : amount;  // Positive for income
+      
+      // Use precise decimal calculation
+      acc[transaction.accountId] = 
+        parseFloat((acc[transaction.accountId] || 0) + change).toFixed(2);
+      
       return acc;
     }, {});
 
@@ -95,7 +101,7 @@ export async function bulkDeleteTransactions(transactionIds) {
           where: { id: accountId },
           data: {
             balance: {
-              increment: balanceChange,
+              increment: parseFloat(balanceChange),
             },
           },
         });
@@ -143,7 +149,7 @@ export async function updateDefaultAccount(accountId) {
     });
 
     revalidatePath("/dashboard");
-    return { success: true, data: serializeTransaction(account) };
+    return { success: true, data: serializeDecimal(account) };
   } catch (error) {
     return { success: false, error: error.message };
   }

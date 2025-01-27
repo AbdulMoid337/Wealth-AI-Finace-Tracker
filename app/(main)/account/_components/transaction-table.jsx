@@ -56,6 +56,7 @@ import { bulkDeleteTransactions } from "@/actions/account";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -187,12 +188,19 @@ export function TransactionTable({ transactions }) {
     )
       return;
 
-    deleteFn(selectedIds);
+    try {
+      await deleteFn(selectedIds);
+      setSelectedIds([]); // Clear selected transactions
+      router.refresh();
+      toast.success(`${selectedIds.length} transactions deleted successfully`);
+    } catch (error) {
+      toast.error(`Failed to delete transactions: ${error.message}`);
+    }
   };
 
   useEffect(() => {
     if (deleted && !deleteLoading) {
-      toast.error("Transactions deleted successfully");
+      toast.success("Transactions deleted successfully");
     }
   }, [deleted, deleteLoading]);
 
