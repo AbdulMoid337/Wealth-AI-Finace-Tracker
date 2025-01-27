@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import {
   Table,
@@ -73,6 +75,8 @@ export function TransactionTable({ transactions }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [recurringFilter, setRecurringFilter] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
 
@@ -101,6 +105,14 @@ export function TransactionTable({ transactions }) {
       });
     }
 
+    // Apply date range filter
+    if (startDate && endDate) {
+      result = result.filter((transaction) => {
+        const transactionDate = new Date(transaction.date);
+        return transactionDate >= startDate && transactionDate <= endDate;
+      });
+    }
+
     // Apply sorting
     result.sort((a, b) => {
       let comparison = 0;
@@ -123,7 +135,7 @@ export function TransactionTable({ transactions }) {
     });
 
     return result;
-  }, [transactions, searchTerm, typeFilter, recurringFilter, sortConfig]);
+  }, [transactions, searchTerm, typeFilter, recurringFilter, startDate, endDate, sortConfig]);
 
   // Pagination calculations
   const totalPages = Math.ceil(
@@ -188,6 +200,8 @@ export function TransactionTable({ transactions }) {
     setSearchTerm("");
     setTypeFilter("");
     setRecurringFilter("");
+    setStartDate(null);
+    setEndDate(null);
     setCurrentPage(1);
   };
 
@@ -202,78 +216,107 @@ export function TransactionTable({ transactions }) {
         <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
       )}
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search transactions..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="pl-8"
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search transactions..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-8"
+            />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Select
+              value={typeFilter}
+              onValueChange={(value) => {
+                setTypeFilter(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-full sm:w-[130px]">
+                <SelectValue placeholder="All Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="INCOME">Income</SelectItem>
+                <SelectItem value="EXPENSE">Expense</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={recurringFilter}
+              onValueChange={(value) => {
+                setRecurringFilter(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="All Transactions" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recurring">Recurring</SelectItem>
+                <SelectItem value="non-recurring">Non-Recurring</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Select
-            value={typeFilter}
-            onValueChange={(value) => {
-              setTypeFilter(value);
+        <div className="flex flex-col sm:flex-row gap-2 items-center">
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date);
               setCurrentPage(1);
             }}
-          >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue placeholder="All Types" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="INCOME">Income</SelectItem>
-              <SelectItem value="EXPENSE">Expense</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={recurringFilter}
-            onValueChange={(value) => {
-              setRecurringFilter(value);
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            placeholderText="Start Date"
+            className="border p-2 rounded w-full sm:w-auto"
+          />
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => {
+              setEndDate(date);
               setCurrentPage(1);
             }}
-          >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue placeholder="All Transactions" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="recurring">Recurring Only</SelectItem>
-              <SelectItem value="non-recurring">Non-recurring Only</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Bulk Actions */}
-          {selectedIds.length > 0 && (
-            <div className="flex items-center gap-2">
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={handleBulkDelete}
-              >
-                <Trash className="h-4 w-4 mr-2" />
-                Delete Selected ({selectedIds.length})
-              </Button>
-            </div>
-          )}
-
-          {(searchTerm || typeFilter || recurringFilter) && (
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            placeholderText="End Date"
+            className="border p-2 rounded w-full sm:w-auto"
+          />
+          {(searchTerm || typeFilter || recurringFilter || startDate || endDate) && (
             <Button
               variant="outline"
               size="icon"
               onClick={handleClearFilters}
               title="Clear filters"
+              className="ml-2"
             >
               <X className="h-4 w-5" />
             </Button>
           )}
         </div>
       </div>
+
+      {/* Bulk Actions */}
+      {selectedIds.length > 0 && (
+        <div className="flex items-center gap-2">
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={handleBulkDelete}
+          >
+            <Trash className="h-4 w-4 mr-2" />
+            Delete Selected ({selectedIds.length})
+          </Button>
+        </div>
+      )}
 
       {/* Transactions Table */}
       <div className="rounded-md border">
