@@ -109,12 +109,7 @@ export function AddTransactionForm({
   };
 
   useEffect(() => {
-    console.log('Transaction Result:', transactionResult);
-    console.log('Transaction Loading:', transactionLoading);
-    console.log('Edit Mode:', editMode);
-
     if (transactionResult?.success && !transactionLoading) {
-      console.log('Redirecting to:', `/account/${transactionResult.data.accountId}`);
       toast.success(
         editMode
           ? "Transaction updated successfully"
