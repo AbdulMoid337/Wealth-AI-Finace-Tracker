@@ -16,7 +16,7 @@ const Header = () => {
   }, [])
   
   return (
-    <header className="fixed top-0 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md z-50 border-b dark:border-gray-800">
+    <header className="fixed top-0 w-full bg-cream dark:bg-charcoal backdrop-blur-md z-50 border-b dark:border-graphite">
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/">
@@ -25,18 +25,18 @@ const Header = () => {
               alt="Welth Logo"
               width={90}
               height={90}
-              className="h-12 w-auto object-contain"
+              className="h-12 w-auto object-contain bg-sand rounded dark:bg-sand dark:rounded"
             />
           </Link>
           {isMounted && <div className="flex items-center pt-2"><Darkmode /></div>}
         </div>
 
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center pr-32 space-x-4">
           <SignedOut>
-            <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+            <a href="#features" className="text-blackish dark:text-tan hover:text-gold dark:hover:text-champagne">
               Features
             </a>
-            <a href="#testimonials" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
+            <a href="#testimonials" className="text-blackish dark:text-tan hover:text-gold dark:hover:text-champagne">
               Testimonials
             </a>
           </SignedOut>
@@ -44,14 +44,14 @@ const Header = () => {
 
         <div className="flex items-center space-x-4">
           <SignedIn>
-            <Link href="/dashboard" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-2">
-              <Button variant="outline">
+            <Link href="/dashboard" className="text-blackish dark:text-tan hover:text-gold dark:hover:text-champagne flex items-center gap-2">
+              <Button variant="outline" className="border-chocolate dark:border-tan">
                 <LayoutDashboard size={18} />
                 <span className="hidden md:inline">Dashboard</span>
               </Button>
             </Link>
             <a href="/transaction/create" className="flex items-center gap-2">
-              <Button>
+              <Button className="bg-sand hover:bg-softgold text-black dark:bg-sand dark:hover:bg-copper">
                 <PenBox size={18} />
                 <span className="hidden md:inline">Add Transaction</span>
               </Button>
@@ -59,7 +59,7 @@ const Header = () => {
           </SignedIn>
           <SignedOut>
             <SignInButton mode="modal">
-              <Button variant="outline">Login</Button>
+              <Button variant="outline" className="border-chocolate dark:border-tan">Login</Button>
             </SignInButton>
           </SignedOut>
           <SignedIn>

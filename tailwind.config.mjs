@@ -9,6 +9,26 @@ export default {
   theme: {
     extend: {
       colors: {
+        cream: '#f5f0e6',
+        beige: '#f0e6d2',
+        tan: '#e7dcbf',
+        khaki: '#d6c9ae',
+        sand: '#cbbfa5',
+        chocolate: '#b89c7e',
+
+        blackish: '#111111',
+        charcoal: '#1c1c1c',
+        slate: '#2a2a2a',
+        graphite: '#3b3b3b',
+        mocha: '#46403c',
+
+         // Gold & Bronze Accents
+         gold: '#b89d60',
+         softgold: '#caa865',
+         bronze: '#a17c4e',
+         copper: '#8c6c3f',
+         champagne: '#e2c88d',
+
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
