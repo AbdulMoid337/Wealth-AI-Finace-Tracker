@@ -18,12 +18,12 @@ export default function RootLayout({ children }) {
         <head>
           <link rel="icon" href="/logo-sm.png" sizes="any" type="image/png"  />
         </head>
-        <body className={`${inter.className}`}>
+        <body className={`${inter.className} bg-cream dark:bg-blackish`}>
           <Header />
           <main className="min-h-screen">{children}</main>
           <Toaster richColors />
 
-          <footer className="bg-beige dark:bg-charcoal py-12">
+          <footer className="bg-cream dark:bg-blackish py-12">
             <div className="container mx-auto px-4 text-center text-blackish dark:text-tan">
               <p>Made with 💗 by Abdul Moid</p>
             </div>

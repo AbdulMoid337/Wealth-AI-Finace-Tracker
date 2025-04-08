@@ -18,7 +18,7 @@ const LandingPage = () => {
       <Hero />
 
       {/* Stats Section */}
-      <section className="py-20 bg-beige dark:bg-charcoal">
+      <section className="py-20 bg-beige dark:bg-blackish">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {statsData.map((stat, index) => (
@@ -227,19 +227,19 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gold dark:bg-bronze">
+      <section className="py-20 bg-chocolate dark:bg-mocha">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-cream mb-4">
+          <h2 className="text-3xl font-bold text-blackish mb-4">
             Ready to Take Control of Your Finances?
           </h2>
-          <p className="text-cream/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-black mb-8 max-w-2xl mx-auto">
             Join thousands of users who are already managing their finances
             smarter with Welth
           </p>
           <Link href="/dashboard">
             <Button
               size="lg"
-              className="bg-cream text-gold hover:bg-beige dark:bg-blackish dark:text-champagne dark:hover:bg-charcoal animate-bounce"
+              className="bg-sand hover:bg-softgold text-black dark:bg-sand dark:hover:bg-copper animate-bounce"
             >
               Start Free Trial
             </Button>

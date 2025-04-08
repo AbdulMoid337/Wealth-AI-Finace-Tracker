@@ -66,14 +66,14 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between  space-y-0 pb-2">
         <div className="flex-1">
           <CardTitle className="text-sm font-medium">
             Monthly Budget (Default Account)
           </CardTitle>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1 ">
             {isEditing ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ">
                 <Input
                   type="number"
                   value={newBudget}
@@ -124,7 +124,7 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
       </CardHeader>
       <CardContent>
         {initialBudget && (
-          <div className="space-y-2">
+          <div className="space-y-2 ">
             <Progress
               value={percentUsed}
               className={cn(
@@ -135,7 +135,7 @@ export function BudgetProgress({ initialBudget, currentExpenses }) {
                     : "bg-green-500"
               )}
             />
-            <p className="text-xs text-muted-foreground text-right">
+            <p className="text-xs text-muted-foreground text-right ">
               {percentUsed.toFixed(1)}% used
             </p>
           </div>
